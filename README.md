@@ -15,7 +15,7 @@ This project automates two steps:
 
 ## Project Structure
 
-```
+```txt
 riftbound/
 ├── riftbound_crawler.py   # Crawls the card gallery and outputs an Excel file
 ├── image_downloader.py    # Downloads card images from the Excel output
@@ -59,6 +59,7 @@ python riftbound_crawler.py
 ```
 
 This will:
+
 - Open a headless Chromium browser
 - Navigate to the Riftbound card gallery
 - Select "All" cards from the set filter
@@ -68,7 +69,7 @@ This will:
 **Options:**
 
 | Flag | Description |
-|---|---|
+| ---- | ----------- |
 | `--no-headless` | Show the browser window (useful for debugging) |
 | `--concurrency 20` | Number of tabs to open simultaneously (default: `10`) |
 | `--output my_file.xlsx` | Custom output filename |
@@ -82,6 +83,7 @@ python image_downloader.py
 ```
 
 This will:
+
 - Read `riftbound_cards.xlsx`
 - Download every image from the `image` column
 - Save each file to `images/{id}.jpg` (or `.png`, etc.)
@@ -93,7 +95,7 @@ This will:
 ### `riftbound_cards.xlsx`
 
 | Column | Description |
-|---|---|
+| ------ | ----------- |
 | `name` | Card name |
 | `id` | Unique card ID |
 | `image` | URL of the card artwork |

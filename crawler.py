@@ -4,15 +4,9 @@ from pathlib import Path
 import pandas as pd
 from playwright.async_api import async_playwright, Page, BrowserContext, TimeoutError as PlaywrightTimeout
 
-
 BASE_URL = "https://riftbound.leagueoflegends.com/en-us/card-gallery"
 OUTPUT_FILE = "riftbound_cards.xlsx"
 MAX_CONCURRENT = 10  # Number of tabs open simultaneously
-
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
 def clean(text: str | None) -> str | None:
 	"""Strip whitespace; return None for empty strings."""
@@ -38,9 +32,6 @@ async def load_all_cards(page: Page) -> None:
 	except PlaywrightTimeout:
 		pass
 
-# ---------------------------------------------------------------------------
-# Card extraction
-# ---------------------------------------------------------------------------
 async def extract_card_from_element(page: Page) -> dict:
 	"""Extract all available attributes from a single card element."""
 	card = {}
@@ -71,13 +62,7 @@ async def extract_card_from_element(page: Page) -> dict:
 		card[key + "_html"] = value_html
 		card[key + "_text"] = value_text
 
-	print(card)
 	return card
-
-
-# ---------------------------------------------------------------------------
-# Concurrent worker
-# ---------------------------------------------------------------------------
 
 async def fetch_card(
 	index: int,
@@ -148,7 +133,6 @@ async def crawl(
 			if url
 		]
 		cards: list[dict] = list(await asyncio.gather(*tasks))
-		# ---------------------------------------------------------------
 
 		await browser.close()
 
@@ -170,6 +154,16 @@ async def crawl(
 
 	return unique
 
+async def test_crawl():
+	"""Run a quick test crawl to verify everything works end-to-end."""
+	async with async_playwright() as p:
+		browser = await p.chromium.launch(headless=True)
+		context = await browser.new_context()
+		page = await context.new_page()
+		await page.goto('https://riftbound.leagueoflegends.com/en-us/card-gallery/#card-gallery--sfd-192-221', wait_until="networkidle", timeout=60_000)
+		card_data = await extract_card_from_element(page)
+		print(card_data)
+		await browser.close()
 
 # Entry point
 if __name__ == "__main__":
@@ -183,10 +177,11 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	asyncio.run(
-		crawl(
-			visit_details=args.details,
-			headless=not args.no_headless,
-			output=args.output,
-			max_concurrent=args.concurrency,
-		)
+		# crawl(
+		# 	visit_details=args.details,
+		# 	headless=not args.no_headless,
+		# 	output=args.output,
+		# 	max_concurrent=args.concurrency,
+		# )
+		test_crawl()
 	)
