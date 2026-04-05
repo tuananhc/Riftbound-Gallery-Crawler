@@ -1,3 +1,8 @@
+"""
+	OUTDATED: This script was used to upload data to PostgreSQL during development, but is no longer needed as the data
+	is now stored in a DynamoDB. Keeping it here for reference, but it can be safely deleted.
+"""
+
 import os
 
 from bs4 import BeautifulSoup

@@ -6,3 +6,4 @@ images
 __pycache__
 *.ipynb
 *.csv
+*.json
