@@ -49,6 +49,8 @@ def main():
 	print(f"[*] Reading {INPUT_FILE} ...")
 	df = pd.read_excel(INPUT_FILE)
 	df.columns = df.columns.str.strip()
+	if "banned" in df.columns:
+		df["banned"] = df["banned"].fillna(False).astype(bool)
 	total = len(df)
 	print(f"[*] {total} rows loaded.")
 
